@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "78450892577",
+    "project_id": "myapp-2025-soknao",
+    "storage_bucket": "myapp-2025-soknao.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78450892577:android:2c04f11bcf73271451a860",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkN5eysCoxINJ2db7rLrNd7fxMUdDDJeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78450892577:android:6c80d0e79b8ac6e251a860",
+        "android_client_info": {
+          "package_name": "com.example.flutterapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkN5eysCoxINJ2db7rLrNd7fxMUdDDJeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
