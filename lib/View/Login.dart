@@ -37,60 +37,81 @@ class _LoginState extends State<Login> {
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
+            return Scaffold(
+              body: Column(
                 children: [
-                  Text(
-                    'Account',
-                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-                  ),
-                  TextField(
-                    controller: _email,
-                    enableSuggestions: true,
-                    autocorrect: false,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 20),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: _pass,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      final email = _email.text;
-                      final pass = _pass.text;
-                      try {
-                        final user = await FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                              email: email,
-                              password: pass,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Account',
+                          style: TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextField(
+                          controller: _email,
+                          enableSuggestions: true,
+                          autocorrect: false,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            labelText: "Email",
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                                width: 20,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        TextField(
+                          controller: _pass,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final email = _email.text;
+                            final pass = _pass.text;
+                            try {
+                              final user = await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                    email: email,
+                                    password: pass,
+                                  );
+                              print(user);
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'user-not-found') {
+                                print('user not fund');
+                              } else if (e.code == 'wrong-password') {
+                                print('Wrong password');
+                              }
+                            }
+                          },
+                          child: Text(
+                            "Login",
+                            style: TextStyle(color: Colors.red, fontSize: 20),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/register/',
+                              (route) => false,
                             );
-                        print(user);
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          print('user not fund');
-                        } else if(e.code == 'wrong-password') {
-                          print('Wrong password');
-                        }
-                      }
-                    },
-                    child: Text(
-                      "Login",
-                      style: TextStyle(color: Colors.red, fontSize: 20),
+                          },
+                          child: Text("Not yet Registered? Sign Up"),
+                        ),
+                      ],
                     ),
                   ),
                 ],
