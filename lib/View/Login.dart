@@ -153,9 +153,25 @@ class _LoginState extends State<Login> {
                               );
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'user-not-found') {
-                                devtools.log('user not fund');
+                                await showErrorDialog(
+                                  context,
+                                  'User not found',
+                                );
                               } else if (e.code == 'wrong-password') {
-                                devtools.log('Wrong password');
+                                await showErrorDialog(
+                                  context,
+                                  'Wrong password',
+                                );
+                              } else if (e.code == 'invalid-credential') {
+                                await showErrorDialog(
+                                  context,
+                                  'Invalid email or password',
+                                );
+                              } else {
+                                await showErrorDialog(
+                                  context,
+                                  'Auth error: ${e.code}',
+                                );
                               }
                             }
                           },
@@ -167,7 +183,7 @@ class _LoginState extends State<Login> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                               registerRoute,
+                              registerRoute,
                               (route) => false,
                             );
                           },
@@ -185,4 +201,24 @@ class _LoginState extends State<Login> {
       },
     );
   }
+}
+
+Future<void> showErrorDialog(BuildContext context, String text) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Error"),
+        content: Text(text),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }

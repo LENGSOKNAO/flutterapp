@@ -120,13 +120,19 @@ class _RegisterState extends State<Register> {
                           );
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
-                            devtools.log('Weak-password');
+                            await showErrorDialog(context, 'Weak password');
                           } else if (e.code == 'email-already-in-use') {
-                            devtools.log('Email is already in use');
+                            await showErrorDialog(
+                              context,
+                              'Email is already in use',
+                            );
                           } else if (e.code == 'invalid-email') {
-                            devtools.log('Your email is invalid');
+                            await showErrorDialog(
+                              context,
+                              'Your email is invalid',
+                            );
                           } else {
-                            print(e);
+                            await showErrorDialog(context, 'Error: ${e.code}');
                           }
                         }
                       },
@@ -153,4 +159,24 @@ class _RegisterState extends State<Register> {
       },
     );
   }
+}
+
+Future<void> showErrorDialog(BuildContext context, String text) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text("Error"),
+        content: Text(text),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }
