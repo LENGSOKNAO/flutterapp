@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/firebase_options.dart';
+import 'dart:developer' as devtools show log;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -38,6 +39,63 @@ class _LoginState extends State<Login> {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             return Scaffold(
+              drawer: Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    DrawerHeader(
+                      decoration: BoxDecoration(color: Colors.blue),
+                      child: Text(
+                        'Drawer Header',
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.home),
+                      title: Text('Home'),
+                      onTap: () {
+                        // Action when Home is tapped
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.settings),
+                      title: Text('Settings'),
+                      onTap: () {
+                        // Action when Settings is tapped
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              appBar: AppBar(
+                title: const Text(
+                  'Login',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.blue,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      // Action when settings icon is pressed
+                    },
+                  ),
+                ],
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue, Colors.purple],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                ),
+              ),
               body: Column(
                 children: [
                   Padding(
@@ -88,12 +146,15 @@ class _LoginState extends State<Login> {
                                     email: email,
                                     password: pass,
                                   );
-                              print(user);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/home/',
+                                (route) => false,
+                              );
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'user-not-found') {
-                                print('user not fund');
+                                devtools.log('user not fund');
                               } else if (e.code == 'wrong-password') {
-                                print('Wrong password');
+                                devtools.log('Wrong password');
                               }
                             }
                           },
