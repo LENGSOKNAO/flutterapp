@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/constants/route.dart';
 import 'package:flutterapp/firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
@@ -141,7 +142,7 @@ class _LoginState extends State<Login> {
                             final email = _email.text;
                             final pass = _pass.text;
                             try {
-                              final user = await FirebaseAuth.instance
+                              await FirebaseAuth.instance
                                   .signInWithEmailAndPassword(
                                     email: email,
                                     password: pass,
@@ -166,7 +167,7 @@ class _LoginState extends State<Login> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushNamedAndRemoveUntil(
-                              '/register/',
+                               registerRoute,
                               (route) => false,
                             );
                           },

@@ -1,11 +1,11 @@
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/View/Login.dart';
 import 'package:flutterapp/View/Register.dart';
+import 'package:flutterapp/constants/route.dart';
 import 'package:flutterapp/firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
@@ -15,9 +15,9 @@ void main() {
     MaterialApp(
       home: MyApp(),
       routes: {
-        '/login/': (context) => Login(),
-        '/register/': (context) => Register(),
-        '/home/': (context) => HomePage(),
+        loginRoute: (context) => Login(),
+        registerRoute: (context) => Register(),
+        homeRoute: (context) => HomePage(),
       },
     ),
   );
@@ -134,6 +134,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.blue,
         actions: [
           PopupMenuButton<MenuAction>(
+            child: const Icon(Icons.settings),
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
@@ -150,8 +151,9 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context) {
               return [
                 const PopupMenuItem(
+                  height: 40,
                   value: MenuAction.logout,
-                  child: Text('Logout'),
+                  child: Text('Logout', style: TextStyle(color: Colors.red)),
                 ),
               ];
             },

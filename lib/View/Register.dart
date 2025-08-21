@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/constants/route.dart';
 import 'package:flutterapp/firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
@@ -108,14 +109,15 @@ class _RegisterState extends State<Register> {
                         final email = _email.text;
                         final pass = _pass.text;
                         try {
-                          final user = await FirebaseAuth.instance
+                          await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
                                 email: email,
                                 password: pass,
                               );
-                          Navigator.of(
-                            context,
-                          ).pushNamedAndRemoveUntil('/home/', (route) => false);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            homeRoute,
+                            (route) => false,
+                          );
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
                             devtools.log('Weak-password');
@@ -135,12 +137,11 @@ class _RegisterState extends State<Register> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/login/',
-                          (route) => false,
-                        );
+                        Navigator.of(
+                          context,
+                        ).pushNamedAndRemoveUntil('/login/', (route) => false);
                       },
-                      child: Text("Login",),
+                      child: Text("Login"),
                     ),
                   ],
                 ),
