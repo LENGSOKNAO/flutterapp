@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/constants/route.dart';
+import 'package:flutterapp/services/auth_execption.dart';
+import 'package:flutterapp/services/auth_service.dart';
+import 'package:flutterapp/utilities/showError.dart';
 import 'package:flutterapp/firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
@@ -142,37 +145,36 @@ class _LoginState extends State<Login> {
                             final email = _email.text;
                             final pass = _pass.text;
                             try {
-                              await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                    email: email,
-                                    password: pass,
-                                  );
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/home/',
-                                (route) => false,
+                              AuthService.firebase().logIn(
+                                email: email,
+                                password: pass,
                               );
-                            } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                await showErrorDialog(
-                                  context,
-                                  'User not found',
-                                );
-                              } else if (e.code == 'wrong-password') {
-                                await showErrorDialog(
-                                  context,
-                                  'Wrong password',
-                                );
-                              } else if (e.code == 'invalid-credential') {
-                                await showErrorDialog(
-                                  context,
-                                  'Invalid email or password',
+                              final user = AuthService.firebase().currentUser;
+                              if (user?.isEmailVerified ?? false) {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  homeRoute,
+                                  (route) => false,
                                 );
                               } else {
-                                await showErrorDialog(
-                                  context,
-                                  'Auth error: ${e.code}',
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  homeRoute,
+                                  (route) => false,
                                 );
                               }
+                            } on UserNotFoundAuthException {
+                              await showErrorDialog(context, 'User not found');
+                            } on WrongPasswordAuthException {
+                              await showErrorDialog(context, 'Wrong password');
+                            } on UserNotLoggedAuthException {
+                              await showErrorDialog(
+                                context,
+                                'User not logged in',
+                              );
+                            } on GennericAuthException {
+                              await showErrorDialog(
+                                context,
+                                'Authentication error',
+                              );
                             }
                           },
                           child: Text(
@@ -201,24 +203,4 @@ class _LoginState extends State<Login> {
       },
     );
   }
-}
-
-Future<void> showErrorDialog(BuildContext context, String text) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text("Error"),
-        content: Text(text),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
 }
