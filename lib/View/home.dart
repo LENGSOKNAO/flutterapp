@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/constants/route.dart';
 import 'package:flutterapp/enums/menu_action.dart';
+import 'package:flutterapp/services/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,10 +62,10 @@ class _HomePageState extends State<HomePage> {
                 case MenuAction.logout:
                   final shouldLogout = await showLogOutDialog(context);
                   if (shouldLogout == true) {
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     Navigator.of(
                       context,
-                    ).pushNamedAndRemoveUntil('/login/', (route) => false);
+                    ).pushNamedAndRemoveUntil(loginRoute, (route) => false);
                   }
                   break;
               }

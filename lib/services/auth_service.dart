@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutterapp/services/auth_provider.dart';
-import 'package:flutterapp/services/auth_service.dart' as _authProvider;
 import 'package:flutterapp/services/auth_user.dart';
 import 'package:flutterapp/services/firebase_auth_provider.dart';
 

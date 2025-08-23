@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/constants/route.dart';
@@ -145,7 +144,7 @@ class _LoginState extends State<Login> {
                             final email = _email.text;
                             final pass = _pass.text;
                             try {
-                              AuthService.firebase().logIn(
+                              await AuthService.firebase().logIn(
                                 email: email,
                                 password: pass,
                               );

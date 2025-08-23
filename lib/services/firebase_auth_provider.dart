@@ -1,13 +1,9 @@
-import 'dart:isolate';
-
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutterapp/firebase_options.dart';
 import 'package:flutterapp/services/auth_provider.dart';
 import 'package:flutterapp/services/auth_user.dart';
 import 'package:flutterapp/services/auth_execption.dart';
-import 'package:flutterapp/services/firebase_auth.dart'
-    show FirebaseAuth, FirebaseAuthException;
 
 class FirebaseAuthProvider implements AuthProvider {
   @override
@@ -15,17 +11,15 @@ class FirebaseAuthProvider implements AuthProvider {
     required String email,
     required String password,
   }) async {
-    // TODO: implement createUser
     try {
-      await firebase_auth.FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      final user = currentUser;
+      final userCredential = await firebase_auth.FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      final user = userCredential.user;
       if (user != null) {
-        return user;
+        return AuthUser.fromFirebase(user);
       } else {
-        throw UserNotLoggedAuthException();
+        throw GennericAuthException();
       }
     } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -43,7 +37,6 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  // TODO: implement currentUser
   AuthUser? get currentUser {
     final user = firebase_auth.FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -58,19 +51,17 @@ class FirebaseAuthProvider implements AuthProvider {
     required String email,
     required String password,
   }) async {
-    // TODO: implement logIn
     try {
-      await firebase_auth.FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      final user = currentUser;
+      final userCredential = await firebase_auth.FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      final user = userCredential.user;
       if (user != null) {
-        return user;
+        return AuthUser.fromFirebase(user);
       } else {
-        throw UserNotLoggedAuthException();
+        throw GennericAuthException();
       }
-    } on FirebaseException catch (e) {
+    } on firebase_auth.FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw UserNotFoundAuthException();
       } else if (e.code == 'wrong-password') {
@@ -85,13 +76,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<void> logOut() async {
-    // TODO: implement logOut
-    final user = firebase_auth.FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await firebase_auth.FirebaseAuth.instance.signOut();
-    } else {
-      throw UserNotLoggedAuthException();
-    }
+    await firebase_auth.FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -103,10 +88,9 @@ class FirebaseAuthProvider implements AuthProvider {
       throw UserNotLoggedAuthException();
     }
   }
-  
+
   @override
   Future<void> initialize() async {
-    // TODO: implement initialize
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );

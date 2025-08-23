@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/constants/route.dart';
@@ -112,7 +111,7 @@ class _RegisterState extends State<Register> {
                         final email = _email.text;
                         final pass = _pass.text;
                         try {
-                          AuthService.firebase().createUser(
+                          await AuthService.firebase().createUser(
                             email: email,
                             password: pass,
                           );

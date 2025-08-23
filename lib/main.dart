@@ -1,14 +1,9 @@
-import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapp/View/Login.dart';
 import 'package:flutterapp/View/Register.dart';
 import 'package:flutterapp/View/home.dart';
 import 'package:flutterapp/View/verified.dart';
 import 'package:flutterapp/constants/route.dart';
-import 'package:flutterapp/firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:flutterapp/services/auth_service.dart';

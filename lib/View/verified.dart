@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/services/auth_service.dart';
 
 class VerifiedEmail extends StatefulWidget {
   const VerifiedEmail({super.key});
@@ -23,7 +23,7 @@ class _VerifiedEmailState extends State<VerifiedEmail> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                final user = FirebaseAuth.instance.currentUser;
+                final user = AuthService.firebase().currentUser;
                 await user?.sendEmailVerification();
               },
               child: const Text('Send Verification Email'),
